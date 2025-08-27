@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile | ZapLink</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+</head>
+<body class="bg-gray-100">
+  <div class="flex h-screen overflow-hidden">
+    <aside class="w-64 bg-white shadow-md flex flex-col fixed h-full">
+      <div class="p-4 font-bold text-lg text-blue-600">ZapLink</div>
+      <nav class="flex-1 p-4">
+        <a href="dashboard.html" class="block py-2 text-gray-700 hover:text-blue-600">
+          <i class="fas fa-home mr-2"></i> Dashboard
+        </a>
+        <a href="profile.html" class="block py-2 text-blue-600">
+          <i class="fas fa-user mr-2"></i> Profile
+        </a>
+      </nav>
+      <div class="p-4">
+        <button id="logoutBtn" class="w-full bg-red-500 text-white py-2 rounded hover:bg-red-600">
+          <i class="fas fa-sign-out-alt mr-2"></i> Logout
+        </button>
+      </div>
+    </aside>
+    <div class="flex-1 ml-64 overflow-y-auto h-screen p-6">
+      <header class="bg-white shadow-sm rounded-lg p-4 mb-6">
+        <h1 class="text-2xl font-bold text-gray-800">Profile Settings</h1>
+      </header>
+      <div class="bg-white rounded-lg shadow-sm overflow-hidden mb-6">
+        <div class="p-6 flex flex-col md:flex-row gap-8">
+          <div class="md:w-1/3 flex flex-col items-center">
+            <div class="text-center">
+              <h3 class="text-xl font-semibold text-gray-800" id="displayName">Loading...</h3>
+              <p class="text-gray-600" id="displayEmail"></p>
+              <p class="text-gray-500 mt-2">Member since: <span id="joinDate"></span></p>
+            </div>
+            <div class="mt-6 w-full">
+              <div class="bg-blue-50 p-4 rounded-lg">
+                <h4 class="font-medium text-blue-800 mb-2">Account Stats</h4>
+                <div class="grid grid-cols-2 gap-4">
+                  <div class="text-center">
+                    <p class="text-2xl font-bold text-blue-600" id="linksCreated">0</p>
+                    <p class="text-sm text-gray-600">Links Created</p>
+                  </div>
+                  <div class="text-center">
+                    <p class="text-2xl font-bold text-blue-600" id="totalClicks">0</p>
+                    <p class="text-sm text-gray-600">Total Clicks</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="md:w-2/3">
+            <form id="profileForm">
+              <div class="grid grid-cols-2 gap-6">
+                <div>
+                <label for="firstName" class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                <input type="text" id="firstName" name="firstName" class="w-full px-4 py-2 border border-gray-300 rounded-md" required>
+                </div>
+                <div>
+                <label for="lastName" class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                <input type="text" id="lastName" name="lastName" class="w-full px-4 py-2 border border-gray-300 rounded-md" required>
+                </div>
+                <div>
+                <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                <input type="text" id="phone" name="phone" class="w-full px-4 py-2 border border-gray-300 rounded-md" required>
+                </div>
+                <div>
+                <label for="bio" class="block text-sm font-medium text-gray-700 mb-1">Bio</label>
+                <input type="text" id="bio" name="bio" class="w-full px-4 py-2 border border-gray-300 rounded-md" required>
+                </div>
+                <div>
+                  <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+                  <input type="text" id="username" name="username" class="w-full px-4 py-2 border border-gray-300 rounded-md" required>
+                </div>
+                <div>
+                  <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                  <input type="email" id="email" name="email" class="w-full px-4 py-2 border border-gray-300 rounded-md" required>
+                </div>
+                <div class="grid grid-cols-1 gap-6">
+                  <button type="button" id="changePasswordBtn" class="text-sm text-blue-600 hover:text-blue-800 mb-2">Change Password</button>
+                  <div id="passwordChangeFields" class="hidden grid grid-cols-1 gap-6 mt-1">
+                    <div>
+                      <label for="newPassword" class="block text-sm font-medium text-gray-700 mb-1">New Password</label>
+                      <input type="password" id="newPassword" name="newPassword" class="w-full px-4 py-2 border border-gray-300 rounded-md">
+                    </div>
+                    <div>
+                      <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
+                      <input type="password" id="confirmPassword" name="confirmPassword" class="w-full px-4 py-2 border border-gray-300 rounded-md">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-8 flex justify-end space-x-3">
+                <button type="button" id="cancelBtn" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 hidden">Cancel</button>
+                <button type="submit" id="saveBtn" class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Save Changes</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div id="messageModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white p-6 rounded shadow w-96 text-center">
+          <h2 id="messageModalTitle" class="text-xl font-bold mb-4">Message</h2>
+          <p id="messageModalContent" class="mb-4 text-gray-700"></p>
+          <button id="closeMessageModal" class="px-4 py-2 bg-blue-600 text-white rounded w-full">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="scripts/config.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        window.location.href = "login.html";
+        return;
+      }
+      const userInfo = JSON.parse(localStorage.getItem("user"));
+      if (userInfo) {
+        document.getElementById("displayName").innerText = userInfo.name || "";
+        document.getElementById("displayEmail").innerText = userInfo.email || "";
+      }
+      // Fetch profile from backend
+      try {
+        const res = await fetch(`${ENV.BASE_URL}/api/users/me`, {
+          headers: { "Authorization": `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (res.ok) {
+        document.getElementById("username").value = data.user.username || "";
+        document.getElementById("email").value = data.user.email || "";
+        document.getElementById("firstName").value = data.user.firstName || "";
+        document.getElementById("lastName").value = data.user.lastName || "";
+        document.getElementById("phone").value = data.user.phone || "";
+        document.getElementById("bio").value = data.user.bio || "";
+        document.getElementById("joinDate").innerText = new Date(data.user.createdAt).toLocaleDateString();
+        }
+      } catch {
+        showMessage("error", "Failed to fetch user data");
+      }
+      // Fetch stats
+      try {
+        const res = await fetch(`${ENV.BASE_URL}/api/url/all`, {
+          headers: { "Authorization": `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (res.ok) {
+          document.getElementById("linksCreated").innerText = data.links.length;
+          document.getElementById("totalClicks").innerText = data.links.reduce((sum, l) => sum + (l.clicks || 0), 0);
+        }
+      } catch {}
+      // Modal logic
+      const messageModal = document.getElementById("messageModal");
+      const messageModalTitle = document.getElementById("messageModalTitle");
+      const messageModalContent = document.getElementById("messageModalContent");
+      const closeMessageModalBtn = document.getElementById("closeMessageModal");
+      function showMessage(type, message) {
+        messageModalTitle.innerText = type === "error" ? "Error" : "Info";
+        messageModalContent.innerText = message;
+        messageModal.classList.remove("hidden");
+      }
+      closeMessageModalBtn.addEventListener("click", () => {
+        messageModal.classList.add("hidden");
+      });
+      // Logout
+      document.getElementById("logoutBtn").addEventListener("click", () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        window.location.href = "login.html";
+      });
+      // Password change toggle
+      const changePasswordBtn = document.getElementById("changePasswordBtn");
+      const passwordChangeFields = document.getElementById("passwordChangeFields");
+      const cancelBtn = document.getElementById("cancelBtn");
+      changePasswordBtn.addEventListener("click", function() {
+        passwordChangeFields.classList.toggle("hidden");
+        cancelBtn.classList.toggle("hidden");
+      });
+      cancelBtn.addEventListener("click", function() {
+        passwordChangeFields.classList.add("hidden");
+        this.classList.add("hidden");
+        document.getElementById("newPassword").value = '';
+        document.getElementById("confirmPassword").value = '';
+      });
+      // Save changes
+      document.getElementById("profileForm").addEventListener("submit", async function(e) {
+        e.preventDefault();
+        const username = document.getElementById("username").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const firstName = document.getElementById("firstName").value.trim();
+        const lastName = document.getElementById("lastName").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+        const bio = document.getElementById("bio").value.trim();
+        const newPassword = document.getElementById("newPassword").value;
+        const confirmPassword = document.getElementById("confirmPassword").value;
+        let updates = { username, email, firstName, lastName, phone, bio };
+        if (!passwordChangeFields.classList.contains("hidden")) {
+          if (newPassword.length < 6) {
+            showMessage("error", "Password must be at least 6 characters long");
+            return;
+          }
+          if (newPassword !== confirmPassword) {
+            showMessage("error", "Passwords do not match");
+            return;
+          }
+          updates.password = newPassword;
+        }
+        try {
+          const res = await fetch(`${ENV.BASE_URL}/api/users/me`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+            body: JSON.stringify(updates)
+          });
+          const data = await res.json();
+          if (res.ok) {
+            localStorage.setItem("user", JSON.stringify({ name: data.user.username, 
+      email: data.user.email,
+      firstName: data.user.firstName,
+      lastName: data.user.lastName,
+      phone: data.user.phone,
+      bio: data.user.bio
+    }));
+            document.getElementById("displayName").innerText = data.user.username;
+            document.getElementById("displayEmail").innerText = data.user.email;
+            showMessage("info", data.message || "Profile updated successfully");
+            passwordChangeFields.classList.add("hidden");
+            cancelBtn.classList.add("hidden");
+            document.getElementById("newPassword").value = '';
+            document.getElementById("confirmPassword").value = '';
+          } else {
+            showMessage("error", data.error || "Update failed");
+          }
+        } catch (err) {
+          showMessage("error", "An error occurred while updating profile");
+        }
+      });
+    });
+  </script>
+</body>

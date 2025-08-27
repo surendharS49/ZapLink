@@ -13,6 +13,7 @@ app.get("/", (req, res) => {
 });
 const users=require("./routes/users");
 const url=require("./routes/url");
+const redirect=require("./routes/redirect");
 const connectDB = require("./src/database");
 
 connectDB().then(() => {
@@ -25,6 +26,7 @@ connectDB().then(() => {
 
 app.use("/api/users", users);
 app.use("/api/url", url);
+app.use("/", redirect);
 
 const PORT = process.env.PORT || 3000;
 
