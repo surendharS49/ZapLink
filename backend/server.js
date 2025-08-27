@@ -5,29 +5,28 @@ dotenv.config();
 const app = express();
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+const corsOptions = {
+    origin: ['http://localhost:3000', 'https://zap-link-sepia.vercel.app/'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    exposedHeaders: ['Authorization'],
+    credentials: true,
+    preflightContinue: false,
+    optionsSuccessStatus: 204
+  };
 
-app.use(cors({
-    origin: "https://zap-link-sepia.vercel.app/", // Replace "*" with your frontend URL in production
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"]
-}));
-app.get("/", (req, res) => {
-    res.send("Hello World!");
-});
+app.use(cors(corsOptions));
+
 const users=require("./routes/users");
 const url=require("./routes/url");
 const redirect=require("./routes/redirect");
 const connectDB = require("./src/database");
 
-connectDB().then(() => {
-    console.log("Database connected");
-}).catch((err) => {
-    console.log(err);
-    process.exit(1);
-});
+app.get('/', (req, res) => {
+    console.log("Health check route hit");
+    res.send('API running ✅');
+  });
 
-app.get("/", (req, res) => res.send("OK"));
 
 app.use("/api/users", users);
 app.use("/api/url", url);
@@ -36,6 +35,13 @@ app.use("/rd", redirect);
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+connectDB()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`✅ Server running on port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error('❌ DB connection failed:', err);
+    process.exit(1); 
+  });
