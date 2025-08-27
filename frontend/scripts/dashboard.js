@@ -1,5 +1,3 @@
-const { ENV } = require("./config");
-const baseUrl = ENV.BASE_URL;
 document.addEventListener("DOMContentLoaded", function () {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -63,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // -------------------
     async function fetchLinks() {
         try {
-            const res = await fetch(`${baseUrl}/api/url/all`, {
+            const res = await fetch(`${window.ENV.BASE_URL}/api/url/all`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             if (!res.ok) throw new Error("Failed to fetch links");
@@ -189,7 +187,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!longUrl) return showMessage("error", "Please enter a URL");
 
         try {
-            const res = await fetch(`${baseUrl}/api/url/create`, {
+            const res = await fetch(`${window.ENV.BASE_URL}/api/url/create`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
                 body: JSON.stringify({ title, url: longUrl, customSlug })
@@ -197,7 +195,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || data.message || "Failed to create link");
 
-            const shortUrl = data.link ? data.link.shortUrl : `${baseUrl}/${data.slug || customSlug}`;
+            const shortUrl = data.link ? data.link.shortUrl : `${window.ENV.BASE_URL}/${data.slug || customSlug}`;
             document.querySelector("#successModal h2").innerText = data.message || "Link Created!";
             generatedLink.value = shortUrl;
             successModal.classList.remove("hidden");
@@ -238,7 +236,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const updatedUrl = editUrlInput.value;
 
         try {
-            const res = await fetch(`${baseUrl}/api/url/${currentEditId}`, {
+            const res = await fetch(`${window.ENV.BASE_URL}/api/url/${currentEditId}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
                 body: JSON.stringify({ title: updatedTitle, url: updatedUrl })
@@ -278,7 +276,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!currentDeleteId) return;
 
         try {
-            const res = await fetch(`${baseUrl}/api/url/${currentDeleteId}`, {
+            const res = await fetch(`${window.ENV.BASE_URL}/api/url/${currentDeleteId}`, {
                 method: "DELETE",
                 headers: { "Authorization": `Bearer ${token}` }
             });

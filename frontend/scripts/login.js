@@ -1,5 +1,7 @@
-const { ENV } = require("./config");
-const baseUrl = ENV.BASE_URL;
+// ...existing code...
+
+const baseUrl = window.ENV.BASE_URL;
+
 document.addEventListener("DOMContentLoaded", function () {
     // Optional: Message modal for login errors
     const messageModal = document.getElementById("messageModal");
@@ -35,10 +37,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (response.ok) {
                 localStorage.setItem("token", data.token);
-                localStorage.setItem("userId", data.userId);
+                localStorage.setItem("userId", data.user.userId);
 
                 // Store user info for dashboard display
-                const userInfo = { name: data.name || "User", email: data.email || email };
+                const userInfo = { name: data.user.name || "User", email: data.user.email || email, userId: data.user.userId };
                 localStorage.setItem("user", JSON.stringify(userInfo));
 
                 window.location.href = "dashboard.html";

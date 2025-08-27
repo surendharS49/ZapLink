@@ -1,5 +1,3 @@
-const {ENV} = require("./config");
-const baseUrl = ENV.BASE_URL;
 document.addEventListener('DOMContentLoaded', function() {
     const registerForm = document.getElementById('registerForm');
 
@@ -62,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         try {
-            const response = await fetch(`${baseUrl}/api/users/register`, {
+            const response = await fetch(`${window.ENV.BASE_URL}/api/users/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

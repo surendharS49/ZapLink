@@ -70,6 +70,15 @@
       </div>
     </form>
   </div>
+  <div id="messageModal" class="modal hidden" tabindex="-1" style="display:block; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.3); z-index:9999;">
+  <div style="background:#fff; margin:10% auto; padding:20px; border-radius:8px; max-width:400px; box-shadow:0 2px 8px rgba(0,0,0,0.2); position:relative;">
+    <h5 id="messageModalTitle"></h5>
+    <div id="messageModalContent" style="margin-bottom:16px;"></div>
+    <button id="closeMessageModal" class="btn btn-secondary">Close</button>
+  </div>
+</div>
+  <script src="scripts/config.js"></script>
+<script src="scripts/register.js"></script>
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -77,5 +86,11 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/js/all.min.js"></script>
   <!-- Password Toggle Script -->
   <script src="scripts/register.js"></script>
+  <!-- Message Modal -->
+
+<style>
+  .modal.hidden { display: none !important; }
+</style>
+
 </body>
 </html>
