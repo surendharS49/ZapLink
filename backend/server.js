@@ -6,7 +6,7 @@ const app = express();
 
 app.use(express.json());
 const corsOptions = {
-    origin: ['http://localhost:3000', 'https://zap-link-sepia.vercel.app/'],
+    origin: ['http://localhost:3000', 'https://zap-link-sepia.vercel.app'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     exposedHeaders: ['Authorization'],
