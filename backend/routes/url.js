@@ -37,7 +37,7 @@ router.post("/create", auth, async (req, res) => {
 
         // Check for custom slug conflict
         if (customSlug) {
-            const slugExists = await Link.findOne({ shortUrl: `${baseUrl}/${customSlug}` });
+            const slugExists = await Link.findOne({ shortUrl: `${baseUrl}/rd/${customSlug}` });
             if (slugExists) {
                 return res.status(400).json({ error: "Custom slug already taken" });
             }
@@ -47,8 +47,8 @@ router.post("/create", auth, async (req, res) => {
         const id = "URI-" + await createid();
         const uniqueId = await createuniqueid();
         const shortUrl = customSlug
-            ? `${baseUrl}/${customSlug}`
-            : `${baseUrl}/${uniqueId}`;
+            ? `${baseUrl}/rd/${customSlug}`
+            : `${baseUrl}/rd/${uniqueId}`;
 
         const link = new Link({
             urlId: id,

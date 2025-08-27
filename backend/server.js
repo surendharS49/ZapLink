@@ -31,7 +31,7 @@ app.get("/", (req, res) => res.send("OK"));
 
 app.use("/api/users", users);
 app.use("/api/url", url);
-app.use("/", redirect);
+app.use("/rd", redirect);
 
 
 const PORT = process.env.PORT || 3000;
