@@ -43,6 +43,16 @@ app.use("/api/url", url);
 
 // Redirect route (dynamic) — last to avoid conflicts
 app.use("/rd", redirect);
+const PORT = process.env.PORT || 3000;
 
-// Start server after DB connection
-const PORT = proces
+// Connect DB then start server
+connectDB()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`✅ Server running on port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error('❌ DB connection failed:', err);
+    process.exit(1); 
+  });
