@@ -6,8 +6,12 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
 
+app.use(cors({
+    origin: "https://zap-link-sepia.vercel.app/", // Replace "*" with your frontend URL in production
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+}));
 app.get("/", (req, res) => {
     res.send("Hello World!");
 });
@@ -23,10 +27,12 @@ connectDB().then(() => {
     process.exit(1);
 });
 
+app.get("/healthz", (req, res) => res.send("OK"));
 
 app.use("/api/users", users);
 app.use("/api/url", url);
 app.use("/", redirect);
+
 
 const PORT = process.env.PORT || 3000;
 
