@@ -27,7 +27,7 @@ connectDB().then(() => {
     process.exit(1);
 });
 
-app.get("/healthz", (req, res) => res.send("OK"));
+app.get("/", (req, res) => res.send("OK"));
 
 app.use("/api/users", users);
 app.use("/api/url", url);
