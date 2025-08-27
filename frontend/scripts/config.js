@@ -1,3 +1,3 @@
 window.ENV = {
-  BASE_URL: "http://localhost:3000" // <-- Set your API URL here
+  BASE_URL: "https://zaplink-txhk.onrender.com" // <-- Set your API URL here
 };
