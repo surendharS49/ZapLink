@@ -17,6 +17,8 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+app.options('*', cors(corsOptions));
+
 const users=require("./routes/users");
 const url=require("./routes/url");
 const redirect=require("./routes/redirect");
