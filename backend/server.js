@@ -10,20 +10,22 @@ const app = express();
 app.use(express.json());
 
 const corsOptions = {
-    origin: ['http://localhost:3000', 'https://zap-link-sepia.vercel.app/'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    origin: "https://zap-link-sepia.vercel.app",
+    methods: ['GET','POST','PUT','DELETE','OPTIONS','PATCH'],
+    allowedHeaders: ['Content-Type','Authorization'],
     exposedHeaders: ['Authorization'],
-    credentials: true,
-    preflightContinue: false,
-    optionsSuccessStatus: 204
+    credentials: true
 };
-
 app.use(cors(corsOptions));
 
 const users = require("./routes/users");
 const url = require("./routes/url");
 const redirect = require("./routes/redirect");
+
+app.get('/healthz', (req, res) => {
+    console.log("Health check route hit");
+    res.send('OK');
+});
 
 // Health check route — must be first
 app.get('/', (req, res) => {
