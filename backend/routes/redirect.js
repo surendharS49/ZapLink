@@ -6,6 +6,11 @@ const auth = require("../utils/auth");
 
 // Redirect & increment clicks
 router.get("/:uniqueId",async (req, res) => {
+    const staticPaths = ["healthz", "api", "favicon.ico"]; // add more if needed
+
+    if (staticPaths.includes(req.params.uniqueId)) {
+        return next(); // skip redirect for these paths
+    }
     try {
         console.log("uniqueId: ", req.params.uniqueId);
         const link = await Link.findOne({ uniqueId: req.params.uniqueId });
