@@ -5,7 +5,11 @@ const UserClick = require("../models/userClick");
 const auth = require("../utils/auth");
 
 // Redirect & increment clicks
-router.get("/:uniqueId",async (req, res, next) => {
+router.get("/healthz", (req, res) => {
+    res.send("OK");
+});
+
+router.get("/:uniqueId([a-zA-Z0-9_-]+)",async (req, res, next) => {
     const staticPaths = ["healthz", "api", "favicon.ico"]; // add more if needed
 
     if (staticPaths.includes(req.params.uniqueId)) {

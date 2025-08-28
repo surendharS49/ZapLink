@@ -101,6 +101,33 @@ router.get("/all", auth, async (req, res) => {
     }
 });
 
+// Get per-user and total click stats
+router.get("/stats/:uniqueId", auth, async (req, res) => {
+    try {
+        const userId = req.user.userId;
+        const link = await Link.findOne({ uniqueId: req.params.uniqueId });
+        if (!link) return res.status(404).json({ error: "Link not found" });
+
+        // User-specific stats
+        const userStats = await UserClick.findOne({ linkId: link._id, userId });
+
+        // Global stats (sum across all users)
+        const globalStats = await UserClick.aggregate([
+            { $match: { linkId: link._id } },
+            { $group: { _id: null, total: { $sum: "$clicks" } } }
+        ]);
+
+        res.json({
+            message: "Click stats fetched successfully",
+            linkId: link.urlId,
+            userClicks: userStats ? userStats.clicks : 0,
+            totalClicks: globalStats.length > 0 ? globalStats[0].total : 0
+        });
+    } catch (err) {
+        console.error("Get Click Stats Error:", err);
+        res.status(500).json({ error: err.message || "Internal server error" });
+    }
+});
 router.put("/:uniqueId", auth, async (req, res) => {
     try {
         const userId = req.user.userId;
@@ -145,34 +172,6 @@ router.delete("/:uniqueId", auth, async (req, res) => {
         });
     } catch (err) {
         console.error("Delete Link Error:", err);
-        res.status(500).json({ error: err.message || "Internal server error" });
-    }
-});
-
-// Get per-user and total click stats
-router.get("/stats/:uniqueId", auth, async (req, res) => {
-    try {
-        const userId = req.user.userId;
-        const link = await Link.findOne({ uniqueId: req.params.uniqueId });
-        if (!link) return res.status(404).json({ error: "Link not found" });
-
-        // User-specific stats
-        const userStats = await UserClick.findOne({ linkId: link._id, userId });
-
-        // Global stats (sum across all users)
-        const globalStats = await UserClick.aggregate([
-            { $match: { linkId: link._id } },
-            { $group: { _id: null, total: { $sum: "$clicks" } } }
-        ]);
-
-        res.json({
-            message: "Click stats fetched successfully",
-            linkId: link.urlId,
-            userClicks: userStats ? userStats.clicks : 0,
-            totalClicks: globalStats.length > 0 ? globalStats[0].total : 0
-        });
-    } catch (err) {
-        console.error("Get Click Stats Error:", err);
         res.status(500).json({ error: err.message || "Internal server error" });
     }
 });

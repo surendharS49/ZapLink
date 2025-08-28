@@ -26,7 +26,7 @@ const corsOptions = {
 };
 
 // Apply CORS middleware
-app.use(cors(corsOptions));
+app.use(cors());
 
 // Explicitly handle preflight requests
 app.options('*', cors(corsOptions));
@@ -61,8 +61,8 @@ const redirect = require("./routes/redirect");
 const connectDB = require("./src/database");
 
 // API routes
-app.use("/api/users", users);
 app.use("/api/url", url);
+app.use("/api/users", users);
 app.use("/rd", redirect);
 
 const PORT = process.env.PORT || 3000;
