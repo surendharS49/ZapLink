@@ -5,17 +5,40 @@ const router = express.Router();
 const User = require("../models/user");
 const createid = require("../utils/createid");
 const auth = require("../utils/auth");
-const e=require("express");
+
+// Helper function for input validation
+function validateRegisterInput({ firstName, lastName, username, email, phone, password }) {
+    if (!firstName || !lastName || !username || !email || !phone || !password) {
+        return "All fields except bio are required";
+    }
+    if (!/^\S+@\S+\.\S+$/.test(email)) return "Invalid email format";
+    if (!/^\d{8,15}$/.test(phone)) return "Phone number must be 8-15 digits";
+    if (password.length < 6) return "Password must be at least 6 characters";
+    return null;
+}
 
 // Register
 router.post("/register", async (req, res) => {
     try {
-        const userId = "ZAP-" + await createid();
-        let { firstName, lastName, username, email, phone, password } = req.body;
-        let bio = req.body.bio || "";
+        const { firstName, lastName, username, email, phone, password, bio } = req.body;
 
+        const validationError = validateRegisterInput({ firstName, lastName, username, email, phone, password });
+        if (validationError) return res.status(400).json({ error: validationError });
+
+        const userId = "ZAP-" + await createid();
         const hashedPassword = await bcrypt.hash(password, 10);
-        const user = new User({ userId, firstName, lastName, username, email, phone, bio, password: hashedPassword });
+
+        const user = new User({
+            userId,
+            firstName,
+            lastName,
+            username,
+            email,
+            phone,
+            bio: bio || "",
+            password: hashedPassword
+        });
+
         await user.save();
 
         const token = jwt.sign({ id: user._id, userId: user.userId }, process.env.JWT_SECRET, { expiresIn: "7d" });
@@ -30,9 +53,12 @@ router.post("/register", async (req, res) => {
             },
             token
         });
-    
+
     } catch (err) {
         console.error("Register Error:", err);
+        if (err.code === 11000) {
+            return res.status(400).json({ error: "Email or username already exists" });
+        }
         res.status(500).json({ error: err.message || "Internal server error" });
     }
 });
@@ -41,6 +67,8 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
     try {
         const { email, password } = req.body;
+        if (!email || !password) return res.status(400).json({ error: "Email and password are required" });
+
         const user = await User.findOne({ email });
         if (!user) return res.status(400).json({ error: "User not found" });
 
@@ -74,17 +102,18 @@ router.get("/me", auth, async (req, res) => {
         res.json({ user });
     } catch (err) {
         console.error("Get Profile Error:", err);
-        res.status(500).json({ error:err.message || "Internal server error" });
+        res.status(500).json({ error: err.message || "Internal server error" });
     }
 });
 
 // Update Profile
 router.put("/me", auth, async (req, res) => {
     try {
-        const updates = req.body;
+        const updates = { ...req.body };
         if (updates.password) {
             updates.password = await bcrypt.hash(updates.password, 10);
         }
+        updates.updatedAt = Date.now();
 
         const user = await User.findOneAndUpdate(
             { userId: req.user.userId },
