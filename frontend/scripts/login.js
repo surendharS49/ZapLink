@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 window.location.href = "dashboard.html";
             } else {
-                showMessage("error", data.message || "Login failed"); // now safe
+                showMessage("error", data.error || "Login failed"); // now safe
             }
         } catch (error) {
             console.error(error);

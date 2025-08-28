@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const firstName = document.getElementById('registerFirstName')?.value.trim();
         const lastName = document.getElementById('registerLastName')?.value.trim();
         const phone = document.getElementById('registerPhone')?.value.trim();
-        const bio = document.getElementById('registerBio')?.value.trim();
+        const bio = document.getElementById('registerBio')?.value.trim() || "";
         const username = document.getElementById('registerUsername')?.value.trim();
         const email = document.getElementById('registerEmail')?.value.trim();
         const password = document.getElementById('registerPassword')?.value;
@@ -56,6 +56,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (password.length < 6) {
             showMessage("error", "Password must be at least 6 characters long");
+            return;
+        }
+        if (password.length > 20) {
+            showMessage("error", "Password must be less than 20 characters long");
             return;
         }
 

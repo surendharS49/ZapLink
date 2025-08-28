@@ -5,6 +5,7 @@ const router = express.Router();
 const User = require("../models/user");
 const createid = require("../utils/createid");
 const auth = require("../utils/auth");
+const e=require("express");
 
 // Register
 router.post("/register", async (req, res) => {
@@ -31,7 +32,7 @@ router.post("/register", async (req, res) => {
     
     } catch (err) {
         console.error("Register Error:", err);
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: err.message || "Internal server error" });
     }
 });
 
@@ -59,7 +60,7 @@ router.post("/login", async (req, res) => {
         });
     } catch (err) {
         console.error("Login Error:", err);
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: err.message || "Internal server error" });
     }
 });
 
@@ -72,7 +73,7 @@ router.get("/me", auth, async (req, res) => {
         res.json({ user });
     } catch (err) {
         console.error("Get Profile Error:", err);
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error:err.message || "Internal server error" });
     }
 });
 
@@ -98,7 +99,7 @@ router.put("/me", auth, async (req, res) => {
         });
     } catch (err) {
         console.error("Update Profile Error:", err);
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: err.message || "Internal server error" });
     }
 });
 
@@ -118,7 +119,7 @@ router.delete("/me", auth, async (req, res) => {
         });
     } catch (err) {
         console.error("Delete Profile Error:", err);
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: err.message || "Internal server error" });
     }
 });
 
