@@ -11,7 +11,8 @@ const e=require("express");
 router.post("/register", async (req, res) => {
     try {
         const userId = "ZAP-" + await createid();
-        const { firstName, lastName, username, email, phone, bio, password } = req.body;
+        let { firstName, lastName, username, email, phone, password } = req.body;
+        let bio = req.body.bio || "";
 
         const hashedPassword = await bcrypt.hash(password, 10);
         const user = new User({ userId, firstName, lastName, username, email, phone, bio, password: hashedPassword });
